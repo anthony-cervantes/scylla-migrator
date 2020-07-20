@@ -5,6 +5,7 @@ import java.net.InetAddress
 import com.datastax.spark.connector.cql.{
   CassandraConnector,
   CassandraConnectorConf,
+  CassandraSSLConf,
   NoAuthConf,
   PasswordAuthConf
 }
@@ -23,6 +24,10 @@ object Connectors {
         },
         maxConnectionsPerExecutor = sourceSettings.connections,
         queryRetryCount           = -1
+        cassandraSSLConf = CassandraSSLConf(
+          enabled = sourceSettings.sslEnabled,
+          enabledAlgorithms = sourceSettings.sslEnabledAlgorithms,
+        )
       )
     )
 
