@@ -8,11 +8,6 @@ import com.scylladb.migrator.config.{Credentials, SourceSettings, TargetSettings
 import org.apache.spark.SparkConf
 
 object Connectors {
-  def sourceSSLConf(sourceSettings: SourceSettings.Cassandra) = CassandraSSLConf(
-    enabled = true,
-    enabledAlgorithms = Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384"),
-  )
-
   def sourceConnector(sparkConf: SparkConf, sourceSettings: SourceSettings.Cassandra) =
     new CassandraConnector(
       CassandraConnectorConf(sparkConf).copy(
@@ -39,5 +34,11 @@ object Connectors {
         maxConnectionsPerExecutor = targetSettings.connections,
         queryRetryCount           = -1
       )
+    )
+
+  def sourceSSLConf() =
+    CassandraSSLConf(
+      enabled = true,
+      enabledAlgorithms = Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384")
     )
 }
