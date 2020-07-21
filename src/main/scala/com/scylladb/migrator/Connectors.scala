@@ -2,17 +2,16 @@ package com.scylladb.migrator
 
 import java.net.InetAddress
 
-import com.datastax.spark.connector.cql.{
-  CassandraConnector,
-  CassandraConnectorConf,
-  CassandraSSLConf,
-  NoAuthConf,
-  PasswordAuthConf
-}
-import com.scylladb.migrator.config.{ Credentials, SourceSettings, TargetSettings }
+import com.datastax.spark.connector.cql.CassandraConnectorConf.CassandraSSLConf
+import com.datastax.spark.connector.cql.{CassandraConnector, CassandraConnectorConf, NoAuthConf, PasswordAuthConf}
+import com.scylladb.migrator.config.{Credentials, SourceSettings, TargetSettings}
 import org.apache.spark.SparkConf
 
 object Connectors {
+  def sourceSSLConf(sourceSettings: SourceSettings.Cassandra) = new CassandraSSLConf(
+    enabled = sourceSettings.sslEnabled,
+    enabledAlgorithms = sourceSettings.sslEnabledAlgorithms
+  )
   def sourceConnector(sparkConf: SparkConf, sourceSettings: SourceSettings.Cassandra) =
     new CassandraConnector(
       CassandraConnectorConf(sparkConf).copy(
@@ -23,11 +22,8 @@ object Connectors {
           case Some(Credentials(username, password)) => PasswordAuthConf(username, password)
         },
         maxConnectionsPerExecutor = sourceSettings.connections,
+        cassandraSSlConf = sourceSSLConf(sourceSettings),
         queryRetryCount           = -1
-        cassandraSSLConf = CassandraSSLConf(
-          enabled = sourceSettings.sslEnabled,
-          enabledAlgorithms = sourceSettings.sslEnabledAlgorithms,
-        )
       )
     )
 

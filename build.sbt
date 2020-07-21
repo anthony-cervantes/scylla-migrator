@@ -31,7 +31,9 @@ lazy val root = (project in file(".")).
       "commons-configuration" % "commons-configuration" % "1.10",
 
       "org.scalatest" %% "scalatest" % "3.0.1" % "test",
-      "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
+
+      "com.datastax.spark" %% "spark-cassandra-connector" % "2.5.1",
     ),
 
     assemblyShadeRules in assembly := Seq(
