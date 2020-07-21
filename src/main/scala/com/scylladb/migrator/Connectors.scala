@@ -8,9 +8,9 @@ import com.scylladb.migrator.config.{Credentials, SourceSettings, TargetSettings
 import org.apache.spark.SparkConf
 
 object Connectors {
-  def sourceSSLConf(sourceSettings: SourceSettings.Cassandra) = new CassandraSSLConf(
-    enabled = sourceSettings.sslEnabled,
-    enabledAlgorithms = sourceSettings.sslEnabledAlgorithms
+  def sourceSSLConf(sourceSettings: SourceSettings.Cassandra) = CassandraSSLConf(
+    enabled = true,
+    enabledAlgorithms = Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384"),
   )
 
   def sourceConnector(sparkConf: SparkConf, sourceSettings: SourceSettings.Cassandra) =
