@@ -12,6 +12,7 @@ object Connectors {
     enabled = sourceSettings.sslEnabled,
     enabledAlgorithms = sourceSettings.sslEnabledAlgorithms
   )
+
   def sourceConnector(sparkConf: SparkConf, sourceSettings: SourceSettings.Cassandra) =
     new CassandraConnector(
       CassandraConnectorConf(sparkConf).copy(
@@ -22,7 +23,7 @@ object Connectors {
           case Some(Credentials(username, password)) => PasswordAuthConf(username, password)
         },
         maxConnectionsPerExecutor = sourceSettings.connections,
-        cassandraSSlConf = sourceSSLConf(sourceSettings),
+        cassandraSSLConf = sourceSSLConf(sourceSettings),
         queryRetryCount           = -1
       )
     )
