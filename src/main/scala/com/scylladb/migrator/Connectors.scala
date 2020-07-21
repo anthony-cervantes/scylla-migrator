@@ -17,6 +17,10 @@ object Connectors {
           case None                                  => NoAuthConf
           case Some(Credentials(username, password)) => PasswordAuthConf(username, password)
         },
+        cassandraSSLConf = CassandraSSLConf(
+         enabled = true,
+         enabledAlgorithms =  Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384")
+        ),
         maxConnectionsPerExecutor = sourceSettings.connections,
         queryRetryCount           = -1
       )
@@ -34,11 +38,5 @@ object Connectors {
         maxConnectionsPerExecutor = targetSettings.connections,
         queryRetryCount           = -1
       )
-    )
-
-  def sourceSSLConf() =
-    CassandraSSLConf(
-      enabled = true,
-      enabledAlgorithms = Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384")
     )
 }
