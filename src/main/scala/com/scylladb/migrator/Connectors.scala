@@ -18,8 +18,9 @@ object Connectors {
           case Some(Credentials(username, password)) => PasswordAuthConf(username, password)
         },
         cassandraSSLConf = CassandraSSLConf(
-         enabled = sparkConf.getBoolean("com.scylladb.migrator.source.sslEnabled", false),
-         enabledAlgorithms =  Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384")
+         enabled = sparkConf.getBoolean("spark.scylladb.migrator.source.sslEnabled", false),
+//         enabledAlgorithms =  Set("TLS_DHE_RSA_WITH_AES_256_GCM_SHA384")
+          enabledAlgorithms = sparkConf.
         ),
         maxConnectionsPerExecutor = sourceSettings.connections,
         queryRetryCount           = -1
