@@ -2,7 +2,7 @@ package com.scylladb.migrator.config
 
 import cats.implicits._
 import io.circe.syntax._
-import io.circe.{Decoder, DecodingFailure, Encoder, Json, ObjectEncoder}
+import io.circe.{ Decoder, DecodingFailure, Encoder, Json, ObjectEncoder }
 import org.apache.spark
 
 sealed trait SourceSettings
@@ -27,7 +27,7 @@ object SourceSettings {
             "host",
             "port",
             "credentials",
-            sparkConf.getS,
+            "keyspace",
             "table",
             "splitCount",
             "connections",
