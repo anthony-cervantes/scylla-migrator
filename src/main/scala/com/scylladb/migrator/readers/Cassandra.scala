@@ -232,6 +232,8 @@ object Cassandra {
       tableDef
     )
 
-    SourceDataFrame(resultingDataframe, selection.timestampColumns, true)
+    val cleanDataframe = resultingDataframe.drop("solr_query")
+
+    SourceDataFrame(cleanDataframe, selection.timestampColumns, true)
   }
 }

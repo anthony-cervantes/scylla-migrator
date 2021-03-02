@@ -38,7 +38,7 @@ object Migrator {
 
     val scheduler = new ScheduledThreadPoolExecutor(1)
 
-    var sourceDF =
+    val sourceDF =
       migratorConfig.source match {
         case cassandraSource: SourceSettings.Cassandra =>
           readers.Cassandra.readDataframe(
@@ -52,14 +52,6 @@ object Migrator {
 
     log.info("Created source dataframe; resulting schema:")
     sourceDF.dataFrame.printSchema()
-
-    log.info("Dropping `solr_query` from dataframe")
-    val sourceDF2 = sourceDF.dataFrame.drop("solr_query")
-
-    sourceDF.dataFrame = sourceDF2
-
-    log.info("New dataframe; resulting schema:")
-    sourceDF.dataframe.printSchema()
 
     val tokenRangeAccumulator =
       if (!sourceDF.savepointsSupported) None
