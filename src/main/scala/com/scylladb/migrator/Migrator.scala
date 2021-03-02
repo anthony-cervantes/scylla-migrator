@@ -54,7 +54,7 @@ object Migrator {
     sourceDF.dataFrame.printSchema()
 
     log.info("Dropping `solr_query` from dataframe")
-    sourceDF2 = sourceDF.dataFrame.drop("solr_query")
+    val sourceDF2 = sourceDF.dataFrame.drop("solr_query")
 
     sourceDF.dataFrame = sourceDF2
 
