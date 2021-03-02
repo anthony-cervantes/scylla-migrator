@@ -3,8 +3,13 @@ package com.scylladb.migrator
 import java.net.InetAddress
 
 import com.datastax.spark.connector.cql.CassandraConnectorConf.CassandraSSLConf
-import com.datastax.spark.connector.cql.{CassandraConnector, CassandraConnectorConf, NoAuthConf, PasswordAuthConf}
-import com.scylladb.migrator.config.{Credentials, SourceSettings, TargetSettings}
+import com.datastax.spark.connector.cql.{
+  CassandraConnector,
+  CassandraConnectorConf,
+  NoAuthConf,
+  PasswordAuthConf
+}
+import com.scylladb.migrator.config.{ Credentials, SourceSettings, TargetSettings }
 import org.apache.spark.SparkConf
 
 object Connectors {
@@ -18,15 +23,19 @@ object Connectors {
           case Some(Credentials(username, password)) => PasswordAuthConf(username, password)
         },
         cassandraSSLConf = CassandraSSLConf(
-         enabled = sparkConf.getBoolean("spark.scylladb.migrator.source.sslEnabled", false),
-          enabledAlgorithms = sparkConf.getOption("spark.scylladb.migrator.source.sslAlgorithms").getOrElse("").split(",").toSet
+          enabled = sparkConf.getBoolean("spark.scylladb.migrator.source.sslEnabled", false),
+          enabledAlgorithms = sparkConf
+            .getOption("spark.scylladb.migrator.source.sslAlgorithms")
+            .getOrElse("")
+            .split(",")
+            .toSet
         ),
         maxConnectionsPerExecutor = sourceSettings.connections,
         queryRetryCount           = -1
       )
     )
 
-  def targetConnector(sparkConf: SparkConf, targetSettings: TargetSettings.Cassandra) =
+  def targetConnector(sparkConf: SparkConf, targetSettings: TargetSettings) =
     new CassandraConnector(
       CassandraConnectorConf(sparkConf).copy(
         hosts = Set(InetAddress.getByName(targetSettings.host)),
@@ -37,7 +46,11 @@ object Connectors {
         },
         cassandraSSLConf = CassandraSSLConf(
           enabled = sparkConf.getBoolean("spark.scylladb.migrator.target.sslEnabled", false),
-          enabledAlgorithms = sparkConf.getOption("spark.scylladb.migrator.target.sslAlgorithms").getOrElse("").split(",").toSet
+          enabledAlgorithms = sparkConf
+            .getOption("spark.scylladb.migrator.target.sslAlgorithms")
+            .getOrElse("")
+            .split(",")
+            .toSet
         ),
         maxConnectionsPerExecutor = targetSettings.connections,
         queryRetryCount           = -1

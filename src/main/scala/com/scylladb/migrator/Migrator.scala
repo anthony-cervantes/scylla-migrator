@@ -53,6 +53,12 @@ object Migrator {
     log.info("Created source dataframe; resulting schema:")
     sourceDF.dataFrame.printSchema()
 
+    log.info("Dropping `solr_query` from dataframe")
+    sourceDF2 = sourceDF.dataFrame.drop("solr_query")
+
+    log.info("New dataframe; resulting schema:")
+    sourceDF2.printSchema()
+
     val tokenRangeAccumulator =
       if (!sourceDF.savepointsSupported) None
       else {
@@ -71,7 +77,7 @@ object Migrator {
       Writer.writeDataframe(
         migratorConfig.target,
         migratorConfig.renames,
-        sourceDF.dataFrame,
+        sourceDF2,
         sourceDF.timestampColumns,
         tokenRangeAccumulator)
     } catch {
